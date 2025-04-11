@@ -22,57 +22,77 @@
       padding: 40px;
       border-radius: 15px;
       box-shadow: 0 0 20px #333;
+      cursor: pointer;
+      transition: transform 0.2s ease;
     }
 
-    #message {
-      margin-top: 20px;
-      font-size: 1.4rem;
-      color: #ddd;
-      transition: all 0.3s ease;
+    #appBox:hover {
+      transform: scale(1.02);
     }
 
-    .loading {
+    #status {
       font-size: 2rem;
       animation: pulse 1.5s infinite;
     }
 
     @keyframes pulse {
-      0% { opacity: 0.3; }
-      50% { opacity: 1; }
-      100% { opacity: 0.3; }
+      0% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+      100% { opacity: 0.4; transform: scale(1); }
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 1.5rem;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
   <div id="appBox">
-    <div id="status" class="loading">⏳ جاري التحميل...</div>
+    <div id="status">😴 اضغط للبدء</div>
     <div id="message"></div>
   </div>
 
   <script>
-    const messageEl = document.getElementById("message");
-    const statusEl = document.getElementById("status");
-
     const messages = [
-      "ميسالش وسّع بالك برد أعصابك"
+      "ميسالش وسّع بالك برد أعصابك 🧘",
+      "خد نفس، الدنيا مش مستاهلة 😌",
+      "كل شيء هيمشي تمام إن شاء الله 🌟",
+      "هدي أعصابك، كلنا بنتأخر أوقات ⏳"
     ];
 
     let counter = 0;
+    let started = false;
+
+    const statusEl = document.getElementById("status");
+    const messageEl = document.getElementById("message");
+    const appBox = document.getElementById("appBox");
 
     function speak(text) {
       const msg = new SpeechSynthesisUtterance(text);
-      msg.lang = 'ar-SA'; // Arabic Saudi (good for dialectal)
+      msg.lang = 'ar-SA';
       msg.rate = 1;
       window.speechSynthesis.speak(msg);
     }
 
-    setInterval(() => {
-      const newMessage = messages[counter % messages.length];
-      statusEl.textContent = "⏳ جاري التحميل...";
-      messageEl.textContent = newMessage;
-      speak(newMessage);
-      counter++;
-    }, 5000); // every 5 seconds
+    function startLoop() {
+      setInterval(() => {
+        const current = messages[counter % messages.length];
+        messageEl.textContent = current;
+        statusEl.textContent = "⏳ جاري التحديث...";
+        speak(current);
+        counter++;
+      }, 5000);
+    }
+
+    appBox.addEventListener("click", () => {
+      if (!started) {
+        started = true;
+        statusEl.textContent = "⏳ جاري التحديث...";
+        startLoop();
+      }
+    });
   </script>
 </body>
 </html>
