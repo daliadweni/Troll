@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تطبيق بيهدي الأعصاب</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    #appBox {
+      background: #222;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #333;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 1.4rem;
+      color: #ddd;
+      transition: all 0.3s ease;
+    }
+
+    .loading {
+      font-size: 2rem;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { opacity: 0.3; }
+    }
+  </style>
+</head>
+<body>
+  <div id="appBox">
+    <div id="status" class="loading">⏳ جاري التحميل...</div>
+    <div id="message"></div>
+  </div>
+
+  <script>
+    const messageEl = document.getElementById("message");
+    const statusEl = document.getElementById("status");
+
+    const messages = [
+      "ميسالش وسّع بالك برد أعصابك"
+    ];
+
+    let counter = 0;
+
+    function speak(text) {
+      const msg = new SpeechSynthesisUtterance(text);
+      msg.lang = 'ar-SA'; // Arabic Saudi (good for dialectal)
+      msg.rate = 1;
+      window.speechSynthesis.speak(msg);
+    }
+
+    setInterval(() => {
+      const newMessage = messages[counter % messages.length];
+      statusEl.textContent = "⏳ جاري التحميل...";
+      messageEl.textContent = newMessage;
+      speak(newMessage);
+      counter++;
+    }, 5000); // every 5 seconds
+  </script>
+</body>
+</html>
